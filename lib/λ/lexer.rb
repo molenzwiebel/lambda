@@ -32,11 +32,10 @@ module Lambda
             # Note that the order of these matters! This lexer is lazy, so it will always match `=` over `==` unless we specify `==` first.
             /==/                                => :operator,
             /=/                                 => :special,
-            /!=/                                => :operator,
-            /!/                                 => :operator
+            /!=/                                => :operator
         }
 
-        KEYWORDS = ["if", "then", "elseif", "else", "lambda"]
+        KEYWORDS = ["if", "elseif", "else", "lambda"]
 
         def initialize(source, file_name = "src")
             @source = source

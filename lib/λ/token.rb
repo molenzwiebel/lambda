@@ -1,5 +1,5 @@
 
-module Molen
+module Lambda
     class Token
         attr_accessor :kind, :value, :column, :length, :line_num
 

@@ -1,5 +1,5 @@
 
-module Molen
+module Lambda
     class Visitor
         def visit_any(node)
             nil
@@ -77,7 +77,7 @@ module Molen
         attrs :left, :op, :right
     end
 
-    class Lambda < ASTNode
+    class LambdaDef < ASTNode
         attrs :args, :body
     end
 
