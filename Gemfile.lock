@@ -1,0 +1,32 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
+    coderay (1.1.0)
+    colorize (0.7.7)
+    debug_inspector (0.0.2)
+    ffi (1.9.8)
+    method_source (0.8.2)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-stack_explorer (0.4.9.2)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
+    rake (10.4.2)
+    ruby-llvm (3.5.0)
+      ffi (~> 1.9.3)
+      rake (~> 10.0)
+    slop (3.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  colorize
+  pry
+  pry-stack_explorer
+  rake
+  ruby-llvm
