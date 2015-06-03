@@ -6,6 +6,7 @@ module Lambda
             # Regex for matching token  => token kind
             /'.'/                               => :char,
             /[+-]?[0-9]+[L]?/                   => :integer,
+            /\/\*.*?\*\//                       => :comment,
 
             /\{/                                => :begin_block,
             /\}/                                => :end_block,
@@ -54,6 +55,9 @@ module Lambda
 
             RULES.each do |matcher, kind|
                 if content = @scanner.scan(matcher) then
+                    if kind == :comment then
+                        return next_token
+                    end
                     if kind == :identifier && KEYWORDS.include?(content) then
                         kind = :keyword
                     end
