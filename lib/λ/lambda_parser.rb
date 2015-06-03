@@ -23,9 +23,21 @@ module Lambda
                 Ident.new consume.value
             end
 
+            expr -> x { x.is_char? } do
+                Num.new consume.value[1...-1].ord
+            end
+
             expr -> x { x.is_keyword?("lambda") or x.is?("λ") } do
                 next_token # Consume kw
-                LambdaDef.new parse_delimited { expect_and_consume(:identifier).value }, parse_expression
+                name = token.is_identifier? ? consume.value : nil
+                LambdaDef.new name, parse_delimited { expect_and_consume(:identifier).value }, parse_expression
+            end
+
+            expr -> x { x.is_lparen? } do
+                next_token
+                expr = parse_expression
+                expect_and_consume :rparen
+                expr
             end
 
             expr -> x { x.is_keyword? "if" } do
@@ -86,6 +98,8 @@ module Lambda
 
             infix 9, -> x { x.is_operator? "==" }, &create_binary_parser(9)
             infix 9, -> x { x.is_operator? "!=" }, &create_binary_parser(9)
+
+            infix 1, -> x { x.is? "=" }, &create_binary_parser(1, true)
         end
     end
 

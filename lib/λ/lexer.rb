@@ -4,6 +4,7 @@ module Lambda
     class Lexer
         RULES = {
             # Regex for matching token  => token kind
+            /'.'/                               => :char,
             /[+-]?[0-9]+[L]?/                   => :integer,
 
             /\{/                                => :begin_block,
