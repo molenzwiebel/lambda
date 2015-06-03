@@ -78,7 +78,7 @@ module Lambda
     end
 
     class LambdaDef < ASTNode
-        attrs :args, :body
+        attrs :name, :args, :body
     end
 
     class Call < ASTNode
