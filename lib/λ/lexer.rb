@@ -6,7 +6,7 @@ module Lambda
             # Regex for matching token  => token kind
             /'.'/                               => :char,
             /[+-]?[0-9]+[L]?/                   => :integer,
-            /\/\*.*?\*\//                       => :comment,
+            /\/\*[\s\S]*?\*\//                  => :comment,
 
             /\{/                                => :begin_block,
             /\}/                                => :end_block,

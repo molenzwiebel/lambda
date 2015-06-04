@@ -29,7 +29,11 @@ module Lambda
         when Ident
             env.get node.name
         when Binary
-            return env.def_var(node.left.name, evaluate(node.right, env)) if node.op == "="
+            if node.op == "=" then
+                existing = env.has(node.left.name)
+                val = evaluate(node.right, env)
+                return existing ? env.set(node.left.name, val) : env.def_var(node.left.name, val)
+            end
             perform_binary node, env
         when LambdaDef
             create_lambda node, env

@@ -4,7 +4,7 @@ module Lambda
         attr_accessor :vars, :parent
 
         def initialize(parent = nil)
-            @vars = parent ? parent.vars.clone : {}
+            @vars = {}
             @parent = parent
         end
 
@@ -22,13 +22,19 @@ module Lambda
         end
 
         def get(name)
-            vars[name] || raise("Undefined variable #{name}")
+            lookup(name).vars[name] || raise("Undefined variable #{name}")
+        end
+
+        def has(name)
+            lookup_scope = lookup name
+            return true if lookup_scope
+            return false
         end
 
         def set(name, val)
             lookup_scope = lookup name
             raise "Undefined variable #{var}" if lookup_scope.nil? && parent
-            (lookup_scope || self).vars[name] = val
+            lookup_scope.vars[name] = val
         end
 
         def def_var(name, val)
