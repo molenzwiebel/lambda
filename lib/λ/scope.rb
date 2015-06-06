@@ -22,7 +22,7 @@ module Lambda
         end
 
         def get(name)
-            lookup(name).vars[name] || raise("Undefined variable #{name}")
+            lookup(name).vars[name] rescue raise("Undefined variable #{name}")
         end
 
         def has(name)

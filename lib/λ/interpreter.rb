@@ -7,10 +7,29 @@ module Lambda
     def self.run(src)
         env = Scope.new
         env.def_var("print", ->(x) {
-            raise "Print takes 1 argument, #{x.size} given" unless x.size == 1
-            #raise "Tried to print proc" if x[0].is_a?(Proc)
+            raise "print takes 1 argument, #{x.size} given" unless x.size == 1
             print(x[0].chr) unless x[0].is_a?(Proc)
             return 0
+        })
+
+        env.def_var("file_open", ->(loc) {
+            # We assume we received a cons() list.
+            str = ""
+            cell = loc[0]
+            until cell.call([1, 0]).is_a?(Proc)
+                str += cell.call([1, 0]).chr
+                cell = cell.call([1, 1])
+            end
+
+            return File.open(str, "r")
+        })
+
+        env.def_var("file_read", ->(file) {
+            return file[0].getc().ord
+        })
+
+        env.def_var("file_iseof", ->(file) {
+            return file[0].eof ? 1 : 0
         })
 
         evaluate parse(src), env
@@ -43,6 +62,7 @@ module Lambda
             return evaluate(node.else_body, env) if node.else_body
         when Call
             func = evaluate(node.target, env)
+            node.raise "Cannot call non-function" unless func.is_a?(Proc)
             func.call(node.args.map{|a| evaluate(a, env)})
         end
     end
@@ -59,6 +79,8 @@ module Lambda
             left * right
         when "/"
             left / right
+        when "%"
+            left % right
         when "=="
             left == right ? 1 : 0
         when "!="
@@ -71,6 +93,10 @@ module Lambda
             left > right ? 1 : 0
         when ">="
             left >= right ? 1 : 0
+        when "&&"
+            (left == 1 && right == 1) ? 1 : 0
+        when "||"
+            (left == 1 || right == 1) ? 1 : 0
         end
     end
 
