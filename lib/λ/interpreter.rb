@@ -8,7 +8,7 @@ module Lambda
         env = Scope.new
         env.def_var("print", ->(x) {
             raise "print takes 1 argument, #{x.size} given" unless x.size == 1
-            print(x[0].chr) unless x[0].is_a?(Proc)
+            print(x.pack("U")) unless x[0].is_a?(Proc)
             return 0
         })
 
@@ -17,7 +17,7 @@ module Lambda
             str = ""
             cell = loc[0]
             until cell.call([1, 0]).is_a?(Proc)
-                str += cell.call([1, 0]).chr
+                str += [cell.call([1, 0])].pack("U")
                 cell = cell.call([1, 1])
             end
 
@@ -25,7 +25,7 @@ module Lambda
         })
 
         env.def_var("file_read", ->(file) {
-            return file[0].getc().ord
+            return file[0].getc().ord rescue -1
         })
 
         env.def_var("file_iseof", ->(file) {
