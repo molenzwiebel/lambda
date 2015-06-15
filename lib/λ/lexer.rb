@@ -1,4 +1,4 @@
-require 'colorize'
+# encoding: utf-8
 
 module Lambda
     class Lexer
@@ -73,12 +73,12 @@ module Lambda
 
         def raise_lexing_error(msg, pos)
             header = "#{@file_name}##{line_num}: "
-            str = "Error: #{msg}\n".red
-            str << "#{@file_name}##{line_num - 1}: #{@source.lines[line_num - 2].chomp}\n".light_black if line_num > 1
+            str = "Error: #{msg}\n"
+            str << "#{@file_name}##{line_num - 1}: #{@source.lines[line_num - 2].chomp}\n" if line_num > 1
             str << "#{header}#{(@source.lines[line_num - 1] || "").chomp}\n"
             str << (' ' * (col_num(@scanner.pos) + header.length - 1))
             str << '^' << "\n"
-            str << "#{@file_name}##{line_num + 1}: #{@source.lines[line_num].chomp}\n".light_black if @source.lines[line_num]
+            str << "#{@file_name}##{line_num + 1}: #{@source.lines[line_num].chomp}\n" if @source.lines[line_num]
             raise str
         end
 
@@ -91,7 +91,7 @@ module Lambda
         end
 
         def col_num(pos)
-            len_before_this_line = @source[0..pos].lines[0..-2].map{|x| x.length}.reduce{|x, y| x + y} || 0
+            len_before_this_line = @source[0..pos].lines.to_a[0..-2].map{|x| x.length}.reduce{|x, y| x + y} || 0
             pos - len_before_this_line
         end
     end

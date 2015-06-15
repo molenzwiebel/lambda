@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 module Lambda
     def parse(src, name = "unknown_file")
